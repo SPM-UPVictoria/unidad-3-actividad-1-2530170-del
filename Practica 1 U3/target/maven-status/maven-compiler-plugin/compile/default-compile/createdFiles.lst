@@ -1,0 +1,9 @@
+com\astrea\core\FallaSistemasException.class
+com\astrea\core\NaveExploracion.class
+com\astrea\core\Propulsable.class
+com\astrea\core\CombustibleInsuficienteException.class
+com\astrea\core\EscudoCriticoException.class
+com\astrea\core\AstreaException.class
+com\astrea\core\NaveCarga.class
+com\astrea\core\NaveEspacial.class
+com\astrea\core\Defendible.class

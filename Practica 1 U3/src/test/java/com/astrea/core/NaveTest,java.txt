@@ -1,0 +1,86 @@
+package com.astrea.core;
+
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+public class NaveTest {
+
+
+    @Test
+    public void test01_CreacionNaveExito() throws AstreaException {
+        NaveCarga nave = new NaveCarga("CRG-001", "Titan", 100.0, 200.0, 10.0, 50.0);
+        assertEquals("CRG-001", nave.getMatricula());
+        assertEquals(100.0, nave.getCombustible(), 0.001);
+    }
+
+    @Test
+    public void test02_RepostarCombustibleExito() throws AstreaException {
+        NaveExploracion nave = new NaveExploracion("EXP-001", "Voyager", 50.0, 100.0);
+        nave.repostarCombustible(30.0);
+        assertEquals(80.0, nave.getCombustible(), 0.001);
+    }
+
+    @Test
+    public void test03_ViajarNaveCargaConsumoNormal() throws AstreaException {
+        NaveCarga nave = new NaveCarga("CRG-002", "Bison", 100.0, 200.0, 20.0, 50.0);
+        nave.viajar(10.0); // 10 * 1.5 = 15.0 consumido
+        assertEquals(85.0, nave.getCombustible(), 0.001);
+    }
+
+    @Test
+    public void test04_ViajarNaveExploracionConsumoNormal() throws AstreaException {
+        NaveExploracion nave = new NaveExploracion("EXP-002", "Pioneer", 100.0, 200.0);
+        nave.viajar(10.0); 
+        assertEquals(92.0, nave.getCombustible(), 0.001);
+    }
+
+
+    @Test
+    public void test05_NaveCargaSobrecargaConsumoDoble() throws AstreaException {
+        NaveCarga nave = new NaveCarga("CRG-003", "Atlas", 100.0, 200.0, 30.0, 50.0);
+        nave.viajar(10.0); 
+        assertEquals(70.0, nave.getCombustible(), 0.001);
+    }
+
+    @Test
+    public void test06_HiperviajeExitoFactorNormal() throws AstreaException {
+        NaveExploracion nave = new NaveExploracion("EXP-003", "Discovery", 100.0, 200.0);
+        nave.activarHiperviaje(5.0);
+        assertEquals(50.0, nave.getCombustible(), 0.001);
+    }
+
+
+    @Test
+    public void test07_AtomicidadViajeSinCombustibleSuficiente() throws AstreaException {
+        NaveCarga nave = new NaveCarga("CRG-004", "Hercules", 20.0, 200.0, 10.0, 50.0);
+        try {
+            nave.viajar(20.0); 
+            fail("Debió lanzar CombustibleInsuficienteException");
+        } catch (CombustibleInsuficienteException e) {
+            assertEquals(20.0, nave.getCombustible(), 0.001);
+        }
+    }
+
+    @Test
+    public void test08_AtomicidadHiperviajeSinCombustible() throws AstreaException {
+        NaveExploracion nave = new NaveExploracion("EXP-004", "Enterprise", 30.0, 200.0);
+        try {
+            nave.activarHiperviaje(5.0); 
+            fail("Debió lanzar CombustibleInsuficienteException");
+        } catch (CombustibleInsuficienteException e) {
+            assertEquals(30.0, nave.getCombustible(), 0.001);
+        }
+    }
+
+    @Test(expected = AstreaException.class)
+    public void test09_RepostajeExcedeCapacidadMaxima() throws AstreaException {
+        NaveExploracion nave = new NaveExploracion("EXP-005", "Endeavour", 90.0, 100.0);
+        nave.repostarCombustible(20.0);
+    }
+
+    @Test(expected = EscudoCriticoException.class)
+    public void test10_EscudoCriticoPorImpactoDestructivo() throws AstreaException {
+        NaveExploracion nave = new NaveExploracion("EXP-006", "Defiant", 100.0, 200.0);
+        nave.recibirImpacto(150.0);
+    }
+}
